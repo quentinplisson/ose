@@ -1,11 +1,17 @@
 package fr.mertzel.ose.modele;
 import java.util.ArrayList ;
+import java.util.Iterator;
+import fr.mertzel.ose.controleur.*;
 
 
 import fr.mertzel.ose.vue.*;
-public class PlanSalle {
+public class PlanSalle extends Observe implements Iterable<PlanSalle.Poste> {
 	private String nom ;
 	private ArrayList<Poste> lesPostes = new ArrayList<Poste>() ;
+	
+	public Iterator<Poste> iterator(){
+		return lesPostes.iterator();
+	}
 
 	public PlanSalle(String nom) {
 		super();
@@ -18,11 +24,13 @@ public class PlanSalle {
 
 	public void setNom(String nom) {
 		this.nom = nom;
+		this.notifier();
 	}
 	
 	public void ajouterPoste(Position position,int orientation){
 		lesPostes.add(new Poste(position,orientation)) ;
 		this.rechercherPostesVisibles() ;
+		this.notifier();
 	}
 	
 	public void retirerPoste(Position position){
@@ -30,6 +38,7 @@ public class PlanSalle {
 		if(indice != -1){
 			lesPostes.remove(indice) ;
 			this.rechercherPostesVisibles() ;
+			this.notifier();
 		}
 	}
 	
@@ -46,6 +55,7 @@ public class PlanSalle {
 		if(indice != -1){
 			lesPostes.get(indice).setOrientation(orientation) ;
 			this.rechercherPostesVisibles() ;
+			this.notifier();
 			}
 		}
 	
@@ -73,9 +83,11 @@ public class PlanSalle {
 		}
 	}
 	
-	public ArrayList<Poste> listerPostes(){
+	/*
+	    public ArrayList<Poste> listerPostes(){
 		return this.lesPostes ;
 	}
+	*/
 	
 	private void rechercherPostesVisibles(){
 		for(Poste poste : lesPostes){

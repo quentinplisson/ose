@@ -58,7 +58,9 @@ public class FenetrePrincipale extends JFrame implements MouseListener {
 		this.pack() ;
 		this.setLocationRelativeTo(null) ;
 		this.setVisible(true) ;
+		
 	}
+	
 	
 	private void creerBarreMenus(){
 		JMenuBar barreMenus = new JMenuBar() ;
@@ -165,10 +167,10 @@ public class FenetrePrincipale extends JFrame implements MouseListener {
 		return this.lePlan ;
 	}
 	
-	public void visualiserPlan(){
+	/*public void visualiserPlan(){
 		this.lePlan.repaint() ;
 	}
-	
+	*/
 	public void afficherMenuContextuel(int x,int y){
 		Position position = new Position(y/Parametres.HAUTEUR_RANGEE,x/Parametres.LARGEUR_TRAVEE) ;
 		if(this.modele.positionOccupee(position)){
@@ -189,7 +191,7 @@ public class FenetrePrincipale extends JFrame implements MouseListener {
 	//--------------------------------------------------------------------------------------
 
 
-	public class Plan extends JPanel {
+	public class Plan extends JPanel implements Observateur {
 		private static final long serialVersionUID = 1L;
 
 		private PlanSalle modele ;
@@ -200,6 +202,11 @@ public class FenetrePrincipale extends JFrame implements MouseListener {
 			super();
 			this.modele = modele ;
 			this.setBackground(Color.white) ;
+			modele.ajouter(this);
+			
+		}
+		public void actualiser() {
+			this.repaint();
 		}
 
 		public void paintComponent(Graphics g){
@@ -224,7 +231,7 @@ public class FenetrePrincipale extends JFrame implements MouseListener {
 
 		private void placerPostes(Graphics2D g){
 			g.setStroke(new BasicStroke()) ;
-			for(PlanSalle.Poste poste : modele.listerPostes()){
+			for(PlanSalle.Poste poste : modele){
 				g.setColor(Color.gray) ;
 				int xPoste = Parametres.posteX(poste.getPosition().getTravee(),poste.getOrientation()) ;
 				int yPoste = Parametres.posteY(poste.getPosition().getRangee(),poste.getOrientation()) ;
@@ -252,7 +259,7 @@ public class FenetrePrincipale extends JFrame implements MouseListener {
 			BasicStroke pointilles = new BasicStroke(1,BasicStroke.CAP_BUTT,BasicStroke.JOIN_ROUND,1.0f,dash,2f) ;
 			g.setStroke(pointilles) ;
 			g.setColor(Color.red) ;
-			for(PlanSalle.Poste poste : modele.listerPostes()){
+			for(PlanSalle.Poste poste : modele){
 				int centreX = Parametres.centrePersonneX(poste.getPosition().getTravee(),poste.getOrientation()) ;
 				int centreY = Parametres.centrePersonneY(poste.getPosition().getRangee(),poste.getOrientation()) ;
 				for(PlanSalle.Poste posteVisible : poste.getPostesVisibles()){

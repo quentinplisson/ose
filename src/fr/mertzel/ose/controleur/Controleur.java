@@ -71,7 +71,7 @@ public class Controleur implements MouseListener, ActionListener {
 		else if(source == vue.getItemRetirer()){
 			modele.retirerPoste(this.position) ;
 		}
-		vue.visualiserPlan() ;
+		//vue.visualiserPlan() ;
 	}
 	
 	public void mouseClicked(MouseEvent evt){
